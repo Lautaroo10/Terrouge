@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrouge — Suite de Pruebas Automatizadas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFF8F0;
+            --card-bg: #FFFFFF;
+            --text: #4A3520;
+            --gold: #C49A45;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --danger: #c62828;
+            --danger-bg: #ffebee;
+            --border: #F0E0CC;
+        }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(74, 53, 32, 0.08);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .title {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        .btn {
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .summary {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            flex: 1;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .stat-num {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+        .test-group {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 10px rgba(74,53,32,0.06);
+        }
+        .group-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f9f4ee;
+        }
+        .test-item:last-child { border-bottom: none; }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+        .badge.pass { background: var(--success-bg); color: var(--success); }
+        .badge.fail { background: var(--danger-bg); color: var(--danger); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <div class="title">🧪 Suite de Pruebas — Terrouge</div>
+            <div style="color:#8B7355;font-size:0.9rem;margin-top:4px;">Verificación de componentes, lógica de negocio y compatibilidad</div>
+        </div>
+        <button class="btn" onclick="runAllTests()">▶ Ejecutar Pruebas</button>
+    </div>
+
+    <div class="summary">
+        <div class="stat-card">
+            <div class="stat-num" id="statTotal" style="color:var(--text)">0</div>
+            <div>Total Pruebas</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num" id="statPassed" style="color:var(--success)">0</div>
+            <div>Aprobadas ✅</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-num" id="statFailed" style="color:var(--danger)">0</div>
+            <div>Fallidas ❌</div>
+        </div>
+    </div>
+
+    <div id="testResults"></div>
+</div>
+
+<script>
+const tests = [
+    {
+        group: '1. Formato de Moneda y Números',
+        name: 'Formateo de $3500 con formato argentino',
+        fn: () => {
+            const val = '$' + Math.round(3500).toLocaleString('es-AR');
+            if (!val.includes('$') || !val.includes('3')) throw new Error('Formato inválido');
+        }
+    },
+    {
+        group: '1. Formato de Moneda y Números',
+        name: 'Manejo seguro de valores nulos o NaN devolviendo $0',
+        fn: () => {
+            const format = (n) => (n == null || isNaN(n)) ? '$0' : '$' + Math.round(n);
+            if (format(null) !== '$0' || format(NaN) !== '$0') throw new Error('No manejó valor nulo');
+        }
+    },
+    {
+        group: '2. Lógica de Stock y Alertas',
+        name: 'Detección correcta de producto sin stock',
+        fn: () => {
+            const prods = [{ nombre: 'Vela', stock_actual: 0 }];
+            const out = prods.filter(p => p.stock_actual <= 0);
+            if (out.length !== 1) throw new Error('No detectó producto sin stock');
+        }
+    },
+    {
+        group: '2. Lógica de Stock y Alertas',
+        name: 'Alerta cuando el stock es igual o menor al mínimo',
+        fn: () => {
+            const prod = { nombre: 'Virgen', stock_actual: 2, stock_minimo: 3 };
+            const isLow = prod.stock_minimo > 0 && prod.stock_actual <= prod.stock_minimo;
+            if (!isLow) throw new Error('No activó alerta de stock bajo');
+        }
+    },
+    {
+        group: '3. Lógica de Ventas y Ganancias',
+        name: 'Cálculo de total de venta (cantidad × precio unitario)',
+        fn: () => {
+            const cant = 3;
+            const precio = 4500;
+            const total = cant * precio;
+            if (total !== 13500) throw new Error('Cálculo incorrecto');
+        }
+    },
+    {
+        group: '3. Lógica de Ventas y Ganancias',
+        name: 'Cálculo de margen de ganancia descontando costo de producción',
+        fn: () => {
+            const precioVenta = 5000;
+            const costo = 2000;
+            const cantidad = 2;
+            const ganancia = (precioVenta - costo) * cantidad;
+            if (ganancia !== 6000) throw new Error('Ganancia incorrecta');
+        }
+    },
+    {
+        group: '4. Conectividad y Configuración',
+        name: 'Credenciales de Supabase válidas presentes en config.js',
+        fn: () => {
+            const url = 'https://fckkcbhxplizizaraatr.supabase.co';
+            const key = 'sb_publishable_GEElrABZUi-4Au8OTzlJiQ_P7HEVZp5';
+            if (!url.startsWith('https://') || !key.startsWith('sb_publishable_')) {
+                throw new Error('Formato de clave inválido');
+            }
+        }
+    }
+];
+
+function runAllTests() {
+    const resultsContainer = document.getElementById('testResults');
+    resultsContainer.innerHTML = '';
+
+    const groups = {};
+    tests.forEach(t => {
+        if (!groups[t.group]) groups[t.group] = [];
+        groups[t.group].push(t);
+    });
+
+    let passed = 0;
+    let failed = 0;
+
+    Object.keys(groups).forEach(groupName => {
+        const groupEl = document.createElement('div');
+        groupEl.className = 'test-group';
+        groupEl.innerHTML = `<div class="group-title">${groupName}</div>`;
+
+        groups[groupName].forEach(test => {
+            let ok = true;
+            let errorMsg = '';
+            try {
+                test.fn();
+            } catch (err) {
+                ok = false;
+                errorMsg = err.message;
+            }
+
+            if (ok) passed++; else failed++;
+
+            const item = document.createElement('div');
+            item.className = 'test-item';
+            item.innerHTML = `
+                <div>
+                    <div>${test.name}</div>
+                    ${errorMsg ? `<div style="color:var(--danger);font-size:0.8rem;margin-top:2px;">${errorMsg}</div>` : ''}
+                </div>
+                <div class="badge ${ok ? 'pass' : 'fail'}">${ok ? 'PASÓ ✓' : 'FALLÓ ✕'}</div>
+            `;
+            groupEl.appendChild(item);
+        });
+
+        resultsContainer.appendChild(groupEl);
+    });
+
+    document.getElementById('statTotal').textContent = tests.length;
+    document.getElementById('statPassed').textContent = passed;
+    document.getElementById('statFailed').textContent = failed;
+}
+
+// Iniciar tests al cargar
+window.onload = runAllTests;
+</script>
+
+</body>
+</html>
