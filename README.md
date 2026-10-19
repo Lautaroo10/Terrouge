@@ -71,5 +71,21 @@ Terrouge/
 
 ---
 
+## 🧪 Pruebas Automatizadas
+
+El sistema cuenta con una suite completa de pruebas unitarias, de integración y visuales:
+
+* **Ejecutar tests por consola:**
+  ```bash
+  npm test
+  ```
+  *(Corre 19 pruebas automáticas: formateo de dinero/fechas, lógica de stock y ganancias, contratos de API Supabase)*
+
+* **Ejecutar tests visuales en el navegador:**
+  Abrí el archivo [`tests/e2e/test_runner.html`](./tests/e2e/test_runner.html) con dos clics en cualquier navegador para ver los resultados interactivos.
+
+---
+
 ## 📱 Uso y Despliegue
 Podés abrir [`index.html`](./index.html) directamente en cualquier navegador o publicarlo de forma gratuita en servicios como **GitHub Pages**, **Vercel** o **Netlify**.
+
