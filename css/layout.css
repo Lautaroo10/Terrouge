@@ -1,0 +1,189 @@
+/* ============================================================
+   TERROUGE — Layout & Shell
+   ============================================================ */
+
+/* ========== HEADER ========== */
+#appHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background: var(--white);
+    border-bottom: 1px solid var(--beige);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 100;
+    box-shadow: 0 1px 4px rgba(74, 53, 32, 0.05);
+}
+
+.header-brand {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--brown-dark);
+}
+
+.header-brand span {
+    color: var(--gold);
+}
+
+.header-logout {
+    background: none;
+    border: none;
+    color: var(--brown-light);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.header-logout:hover {
+    background: var(--cream-dark);
+    color: var(--danger);
+}
+
+/* ========== BOTTOM NAVIGATION (MÓVIL) ========== */
+#bottomNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    background: var(--brown-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    min-width: 58px;
+}
+
+.nav-btn .nav-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.nav-btn.active {
+    color: var(--gold-light);
+}
+
+.nav-btn:active {
+    transform: scale(0.92);
+}
+
+/* ========== MAIN CONTENT & PÁGINAS ========== */
+#app {
+    display: none;
+}
+
+.app-main {
+    padding-top: calc(var(--header-height) + 12px);
+    padding-bottom: calc(var(--nav-height) + 20px);
+    min-height: 100vh;
+}
+
+.page {
+    display: none;
+    padding: 0 16px;
+}
+
+.page.active {
+    display: block;
+    animation: fadeIn 0.25s ease;
+}
+
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--brown-dark);
+    margin-bottom: 16px;
+}
+
+/* ========== RESPONSIVE ESCRITORIO (>= 768px) ========== */
+@media (min-width: 768px) {
+    #bottomNav {
+        top: 0;
+        bottom: auto;
+        height: var(--header-height);
+        left: auto;
+        right: 0;
+        width: auto;
+        gap: 4px;
+        padding: 0 16px;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .nav-btn {
+        flex-direction: row;
+        gap: 6px;
+        color: var(--brown-light);
+        font-size: 0.85rem;
+    }
+
+    .nav-btn.active {
+        color: var(--gold-dark);
+    }
+
+    .nav-btn .nav-icon {
+        font-size: 1.1rem;
+    }
+
+    .app-main {
+        padding-bottom: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .modal-overlay {
+        align-items: center;
+    }
+
+    .modal {
+        border-radius: 20px;
+    }
+
+    .btn-fab {
+        bottom: 24px;
+        right: calc(50% - 400px + 20px);
+    }
+
+    .dash-stats {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+
+    .quick-actions {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+    }
+
+    .quick-actions .btn-quick {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .report-summary {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}

@@ -1,0 +1,41 @@
+/* ============================================================
+   TERROUGE — Variables & Design Tokens
+   Paleta de colores cálida y artesanal (Velas & Imaginería)
+   ============================================================ */
+
+:root {
+    /* Paleta Terrouge */
+    --cream: #FFF8F0;
+    --cream-dark: #F5EDE3;
+    --beige: #F0E0CC;
+    --gold: #C49A45;
+    --gold-light: #D9B76A;
+    --gold-dark: #A67D30;
+    --brown: #6B4E2E;
+    --brown-dark: #4A3520;
+    --brown-light: #8B7355;
+    --white: #FFFFFF;
+
+    /* Estados y Feedback */
+    --success: #5EA85E;
+    --success-bg: #E8F5E8;
+    --danger: #CC4A3F;
+    --danger-bg: #FDE8E6;
+    --warning: #D49B30;
+    --warning-bg: #FFF3D6;
+    --info: #5B9BD5;
+    --info-bg: #E3F0FC;
+
+    /* Sombras y Elevación */
+    --shadow: 0 2px 12px rgba(74, 53, 32, 0.08);
+    --shadow-lg: 0 4px 24px rgba(74, 53, 32, 0.15);
+
+    /* Radios */
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 20px;
+
+    /* Dimensiones clave */
+    --nav-height: 68px;
+    --header-height: 60px;
+}

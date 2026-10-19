@@ -1,0 +1,10 @@
+/* ============================================================
+   TERROUGE — Master Stylesheet
+   Importa la arquitectura modular de estilos CSS
+   ============================================================ */
+
+@import './variables.css';
+@import './base.css';
+@import './components.css';
+@import './layout.css';
+@import './views.css';

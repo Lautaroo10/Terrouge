@@ -1,0 +1,72 @@
+/* ============================================================
+   TERROUGE — Base & Reset
+   ============================================================ */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--cream);
+    color: var(--brown-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+a {
+    color: var(--gold-dark);
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cream-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--beige);
+    border-radius: 3px;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
