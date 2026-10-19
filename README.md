@@ -1,91 +1,46 @@
-# 🕯️ Terrouge — Sistema de Control de Stock y Ventas
+# 🕯️ Terrouge — Control de Stock y Ventas
 
-Aplicación web diseñada específicamente para emprendimientos artesanales (velas aromáticas, imaginería religiosa, decoración), optimizada para su uso en celulares y computadoras con interfaz en español rioplatense y respaldo de datos en tiempo real mediante **Supabase**.
-
----
-
-## 📁 Arquitectura del Proyecto
-
-El sistema cuenta con una arquitectura modular y organizada por responsabilidades:
-
-```text
-Terrouge/
-├── index.html                   # Punto de entrada HTML limpio y semántico
-├── supabase-setup.sql           # Script SQL para tablas, RLS, triggers y bucket
-├── README.md                    # Documentación del proyecto
-│
-├── css/                         # Arquitectura modular de estilos
-│   ├── variables.css            # Paleta de colores, tokens de espaciado y radios
-│   ├── base.css                 # Reset, tipografía Nunito, scrollbar y animaciones
-│   ├── components.css           # Botones, tarjetas, inputs, modales, toasts y banners
-│   ├── layout.css               # Header fijo, bottom nav móvil y responsive de escritorio
-│   ├── views.css                # Estilos específicos de cada pantalla
-│   └── main.css                 # Importador central de hojas de estilo
-│
-└── js/                          # Arquitectura modular JavaScript
-    ├── config.js                # Credenciales y validación de Supabase (URL y anon key)
-    ├── state.js                 # Estado global centralizado (reactividad de datos)
-    ├── supabase.js              # Inicialización y cliente resiliente de Supabase
-    ├── utils.js                 # Formateo de pesos argentinos ($), fechas y helpers de UI
-    ├── app.js                   # Bootstrap, ciclo de vida e inicio de la aplicación
-    │
-    └── modules/                 # Módulos por dominio de negocio
-        ├── auth.js              # Login, logout, recordar sesión y recuperación de clave
-        ├── navigation.js        # Enrutamiento entre pantallas y control de pestañas
-        ├── dashboard.js         # Métricas en vivo, alertas de stock y ranking de ventas
-        ├── stock.js             # Catálogo de productos, fotos, compresión y stock mínimo
-        ├── categories.js        # Gestión de categorías de productos
-        ├── sales.js             # Registro de ventas, medios de pago y anulación
-        ├── production.js        # Registro de producción y suma automática de stock
-        ├── reports.js           # Gráfico mensual y exportación a Excel (.xlsx) y CSV
-        └── samples.js           # Carga y borrado de productos de ejemplo iniciales
-```
+**Terrouge** es una aplicación web pensada y desarrollada para la gestión diaria de un emprendimiento artesanal en Argentina dedicado a la elaboración y venta de **velas aromáticas de decoración** y **vírgenes / imaginería religiosa artesanal**.
 
 ---
 
-## 🚀 Guía de Configuración Inicial
+## 🎯 ¿De qué se trata la aplicación?
 
-### 1. Configurar la base de datos en Supabase
-1. Ingresá a [supabase.com](https://supabase.com/) e iniciá sesión.
-2. Creá un nuevo proyecto (por ejemplo `Terrouge`).
-3. En el menú lateral izquierdo, andá a **SQL Editor**.
-4. Hacé clic en **New query**, copiá todo el contenido del archivo [`supabase-setup.sql`](./supabase-setup.sql) y hacé clic en **Run**.
-   - Esto creará automáticamente las tablas (`categorias`, `productos`, `ventas`, `produccion`), políticas de seguridad RLS por usuario, triggers de stock y el bucket `product-photos`.
+La aplicación nace con el objetivo de brindar una herramienta sumamente fácil, intuitiva y accesible para llevar el control de todo el negocio sin complicaciones técnicas, funcionando de forma fluida tanto desde un teléfono celular como desde una computadora.
 
-### 2. Configurar las credenciales en la App
-1. En el panel de Supabase, andá a **Project Settings** (icono de engranaje) ➔ **Data API** (o **API**).
-2. Copiá:
-   - **Project URL**
-   - **Project API Keys** ➔ **`anon` `public`** *(Nunca uses `service_role`)*
-3. Abrí el archivo [`js/config.js`](./js/config.js) y reemplazá los valores:
-   ```javascript
-   const SUPABASE_URL = 'https://tu-proyecto.supabase.co';
-   const SUPABASE_KEY = 'tu-clave-anonima-publica';
-   ```
-
-### 3. Crear el usuario para tu mamá
-1. En Supabase, andá a **Authentication** ➔ **Users**.
-2. Hacé clic en **Add user** ➔ **Create user**.
-3. Ingresá el correo electrónico y la contraseña con la que ella va a ingresar.
-4. Marcá la casilla **Auto Confirm User?** para que pueda ingresar directamente sin esperar email de verificación.
+Permite a la artesana llevar al día su inventario, saber exactamente cuánto produce, cuánto vende y cuál es su ganancia estimada en tiempo real con datos guardados de forma segura en la nube.
 
 ---
 
-## 🧪 Pruebas Automatizadas
+## ✨ Principales Funcionalidades
 
-El sistema cuenta con una suite completa de pruebas unitarias, de integración y visuales:
+### 🏠 1. Panel de Inicio (Dashboard)
+* **Resumen en vivo:** Muestra las unidades totales disponibles, las ventas del día, el acumulado del mes y la ganancia neta estimada.
+* **Alertas automáticas de stock:** Avisa de forma visual e inmediata si algún producto se quedó sin unidades o bajó del stock mínimo de seguridad.
+* **Ranking de ventas:** Muestra los productos más vendidos de los últimos 30 días.
+* **Acciones rápidas:** Accesos directos con botones grandes para registrar una venta o una tanda nueva de producción con un solo toque.
 
-* **Ejecutar tests por consola:**
-  ```bash
-  npm test
-  ```
-  *(Corre 19 pruebas automáticas: formateo de dinero/fechas, lógica de stock y ganancias, contratos de API Supabase)*
+### 📦 2. Control de Stock y Catálogo
+* **Catálogo de productos:** Registro con nombre, categoría (ej. *Velas decorativas*, *Vírgenes artesanales*), precio de venta al público y costo de producción.
+* **Fotos de productos:** Soporte para adjuntar fotos de las creaciones con optimización y compresión automática.
+* **Buscador y filtros:** Búsqueda rápida por nombre y filtrado por categoría.
+* **Gestión de categorías:** Organización personalizada del catálogo.
 
-* **Ejecutar tests visuales en el navegador:**
-  Abrí el archivo [`tests/e2e/test_runner.html`](./tests/e2e/test_runner.html) con dos clics en cualquier navegador para ver los resultados interactivos.
+### 🛒 3. Registro Ágil de Ventas
+* **Carga rápida:** Selección de producto, cantidad, fecha y medio de pago (efectivo, transferencia o tarjetas).
+* **Descuento automático:** Cada venta descuenta inmediatamente las unidades correspondientes del stock.
+* **Anulación y reactivación:** Si una venta se cancela o anula, el sistema reintegra automáticamente el stock sin descuadrar los números.
+
+### ✨ 4. Carga de Producción
+* Permite asentar cada vez que se finaliza una tanda de producción de velas o artesanías, sumando de inmediato las unidades al stock disponible con fecha y notas de fabricación.
+
+### 📊 5. Reportes y Copias de Seguridad
+* **Estadísticas y gráficos:** Gráficos mensuales de evolución de ventas y totales por período y categoría.
+* **Descarga de respaldos:** Exportación de todo el historial (productos, ventas y producción) a planillas de cálculo en **Excel (.xlsx)** y archivos **CSV**.
+* **Recordatorio inteligente:** Avisa si pasó más de un mes sin descargar una copia de seguridad para mantener la información siempre a salvo.
 
 ---
 
-## 📱 Uso y Despliegue
-Podés abrir [`index.html`](./index.html) directamente en cualquier navegador o publicarlo de forma gratuita en servicios como **GitHub Pages**, **Vercel** o **Netlify**.
-
+## 🎨 Diseño y Experiencia de Usuario
+* **Español rioplatense:** Textos familiares y claros, pensados para personas sin conocimientos técnicos.
+* **Enfoque móvil (Mobile First):** Botones amplios, navegación inferior cómoda al alcance del pulgar y paleta de colores cálida acorde a la estética artesanal.
