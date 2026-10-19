@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Terrouge — Control de Stock y Ventas</title>
+    <meta name="description" content="Sistema de control de stock y ventas para emprendimientos artesanales">
+    <meta name="theme-color" content="#4A3520">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Terrouge">
+
+    <!-- Fuentes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Librerías Externas -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Arquitectura de Estilos Modular -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/views.css">
+</head>
+<body>
+
+<!-- ==================== PANTALLA DE LOGIN ==================== -->
+<div id="loginScreen">
+    <div class="login-container">
+        <div class="login-logo">🕯️ Terr<span>ouge</span></div>
+        <p class="login-subtitle">Control de stock y ventas</p>
+
+        <!-- Alerta de configuración inicial de Supabase -->
+        <div id="loginConfigAlert" class="login-config-alert">
+            ℹ️ <strong>Paso inicial:</strong> Recordá ingresar tu URL y clave pública de Supabase en el archivo <code>js/config.js</code> para conectar tu base de datos en la nube.
+        </div>
+
+        <div id="loginError" class="login-error"></div>
+        <form id="loginForm" class="login-form" autocomplete="on">
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="tu@email.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Contraseña</label>
+                <input type="password" id="loginPassword" placeholder="Tu contraseña" required autocomplete="current-password">
+            </div>
+            <label class="login-keep">
+                <input type="checkbox" id="loginKeep" checked>
+                <span>Mantener sesión iniciada</span>
+            </label>
+            <a class="login-forgot" id="forgotBtn">¿Olvidaste tu contraseña?</a>
+            <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">Iniciar sesión</button>
+        </form>
+    </div>
+</div>
+
+<!-- ==================== APLICACIÓN PRINCIPAL ==================== -->
+<div id="app">
+    <!-- Barra Superior (Header) -->
+    <header id="appHeader">
+        <div class="header-brand">🕯️ Terr<span>ouge</span></div>
+        <button class="header-logout" id="logoutBtn" title="Cerrar sesión actual">Cerrar sesión ↗</button>
+    </header>
+
+    <!-- Contenedor Principal de Vistas -->
+    <main class="app-main">
+
+        <!-- ===== VISTA: DASHBOARD / INICIO ===== -->
+        <section id="pageDashboard" class="page active">
+            <h1 class="page-title">¡Hola! 👋</h1>
+
+            <!-- Recordatorio de Respaldo -->
+            <div id="backupReminder" class="alert-banner alert-info" style="display:none">
+                <span class="alert-icon">💾</span>
+                <div>
+                    <strong>Recordatorio:</strong> Hace más de un mes que no descargás un respaldo.
+                    <a href="#" id="backupReminderLink" style="text-decoration:underline">Ir a Reportes para descargarlo</a>
+                </div>
+                <button class="alert-close" id="backupReminderClose" title="Cerrar aviso">✕</button>
+            </div>
+
+            <!-- Métricas / Indicadores Rápidos -->
+            <div class="dash-stats" id="dashStats">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-value" id="statTotalStock">-</div>
+                    <div class="stat-label">Unidades en stock</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-value" id="statVentasHoy">-</div>
+                    <div class="stat-label">Ventas hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value" id="statVentasMes">-</div>
+                    <div class="stat-label">Ventas del mes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-value" id="statGanancia">-</div>
+                    <div class="stat-label">Ganancia est. del mes</div>
+                </div>
+            </div>
+
+            <!-- Alertas de Stock Bajo / Agotado -->
+            <div id="lowStockAlerts"></div>
+
+            <!-- Accesos Rápidos para mamá -->
+            <div class="section-title">Acciones rápidas</div>
+            <div class="quick-actions">
+                <button class="btn btn-quick" onclick="openSaleModal()">
+                    <span class="btn-quick-icon" style="background:var(--gold-light);color:white">🛒</span>
+                    Registrar venta
+                </button>
+                <button class="btn btn-quick" onclick="openProductionModal()">
+                    <span class="btn-quick-icon" style="background:var(--success-bg);color:var(--success)">✨</span>
+                    Cargué producción nueva
+                </button>
+                <button class="btn btn-quick" onclick="navigateTo('stock')">
+                    <span class="btn-quick-icon" style="background:var(--info-bg);color:var(--info)">📦</span>
+                    Ver stock
+                </button>
+            </div>
+
+            <!-- Ranking: Productos más vendidos -->
+            <div class="section-title">🏆 Más vendidos (últimos 30 días)</div>
+            <div class="card" id="topSellersCard">
+                <div id="topSellersList">
+                    <div class="empty-state"><p>Todavía no hay ventas registradas</p></div>
+                </div>
+            </div>
+
+            <!-- Banner de Datos de Ejemplo -->
+            <div id="sampleDataBanner" class="sample-banner" style="display:none">
+                <p>📋 Tenés productos de ejemplo cargados. Cuando quieras empezar de cero:</p>
+                <button class="btn btn-sm btn-danger" onclick="clearSampleData()">🗑️ Borrar datos de ejemplo</button>
+            </div>
+        </section>
+
+        <!-- ===== VISTA: STOCK ===== -->
+        <section id="pageStock" class="page">
+            <h1 class="page-title">📦 Stock</h1>
+
+            <!-- Pestañas internas -->
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="switchStockTab('productos')">Productos</button>
+                <button class="tab-btn" onclick="switchStockTab('categorias')">Categorías</button>
+            </div>
+
+            <!-- Tab: Productos -->
+            <div id="stockProductos">
+                <div class="search-bar">
+                    <input type="text" class="search-input" id="productSearch" placeholder="🔍 Buscar producto...">
+                    <select class="filter-select" id="productCategoryFilter">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div id="productList">
+                    <div class="loading-spinner"><div class="spinner"></div></div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="openProductModal()" style="margin-top:12px">
+                    ➕ Agregar producto
+                </button>
+            </div>
+
+            <!-- Tab: Categorías -->
+            <div id="stockCategorias" style="display:none">
+                <div id="categoryList">
+                    <div class="loading-spinner"><div class="spinner"></div></div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="openCategoryModal()" style="margin-top:12px">
+                    ➕ Agregar categoría
+                </button>
+            </div>
+        </section>
+
+        <!-- ===== VISTA: VENTAS ===== -->
+        <section id="pageVentas" class="page">
+            <h1 class="page-title">🛒 Ventas</h1>
+
+            <button class="btn btn-primary btn-block" onclick="openSaleModal()" style="margin-bottom:14px">
+                ➕ Registrar venta
+            </button>
+
+            <!-- Filtros por período -->
+            <div class="date-range" style="margin-bottom:14px">
+                <input type="date" id="ventasFilterFrom" class="form-input" style="flex:1">
+                <span>a</span>
+                <input type="date" id="ventasFilterTo" class="form-input" style="flex:1">
+                <button class="btn btn-sm btn-secondary" onclick="filterSales()">Filtrar</button>
+            </div>
+
+            <!-- Barra de total facturado -->
+            <div class="sales-total-bar" id="salesTotalBar" style="display:none">
+                <span>Total del período</span>
+                <span class="sales-total-value" id="salesTotalValue">$0</span>
+            </div>
+
+            <!-- Listado de ventas -->
+            <div id="salesList">
+                <div class="loading-spinner"><div class="spinner"></div></div>
+            </div>
+        </section>
+
+        <!-- ===== VISTA: PRODUCCIÓN ===== -->
+        <section id="pageProduccion" class="page">
+            <h1 class="page-title">✨ Producción</h1>
+
+            <button class="btn btn-primary btn-block" onclick="openProductionModal()" style="margin-bottom:14px">
+                ➕ Registrar producción
+            </button>
+
+            <div id="productionList">
+                <div class="loading-spinner"><div class="spinner"></div></div>
+            </div>
+        </section>
+
+        <!-- ===== VISTA: REPORTES ===== -->
+        <section id="pageReportes" class="page">
+            <h1 class="page-title">📊 Reportes</h1>
+
+            <!-- Filtros de fecha y categoría -->
+            <div class="report-filters">
+                <input type="date" id="reportFrom">
+                <input type="date" id="reportTo">
+                <select id="reportCategory">
+                    <option value="">Todas las categorías</option>
+                </select>
+                <button class="btn btn-sm btn-primary" onclick="loadReport()">Ver reporte</button>
+            </div>
+
+            <!-- Resumen numérico -->
+            <div class="report-summary" id="reportSummary">
+                <div class="report-stat">
+                    <div class="report-stat-value" id="reportTotalVentas">$0</div>
+                    <div class="report-stat-label">Total vendido</div>
+                </div>
+                <div class="report-stat">
+                    <div class="report-stat-value" id="reportCantVentas">0</div>
+                    <div class="report-stat-label">Ventas realizadas</div>
+                </div>
+                <div class="report-stat">
+                    <div class="report-stat-value" id="reportUnidades">0</div>
+                    <div class="report-stat-label">Unidades vendidas</div>
+                </div>
+                <div class="report-stat">
+                    <div class="report-stat-value" id="reportGanancia">$0</div>
+                    <div class="report-stat-label">Ganancia estimada</div>
+                </div>
+            </div>
+
+            <!-- Gráfico mensual -->
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas>
+            </div>
+
+            <!-- Exportar / Descargar respaldo -->
+            <div class="section-title">📥 Descargar respaldo</div>
+            <div class="export-buttons">
+                <button class="btn btn-secondary" onclick="exportExcel()" style="flex:1">
+                    📗 Excel (.xlsx)
+                </button>
+                <button class="btn btn-secondary" onclick="exportCSV()" style="flex:1">
+                    📄 CSV
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Barra de Navegación Inferior (Móvil / Desktop adaptado) -->
+    <nav id="bottomNav">
+        <button class="nav-btn active" data-page="dashboard" onclick="navigateTo('dashboard')">
+            <span class="nav-icon">🏠</span>
+            <span>Inicio</span>
+        </button>
+        <button class="nav-btn" data-page="stock" onclick="navigateTo('stock')">
+            <span class="nav-icon">📦</span>
+            <span>Stock</span>
+        </button>
+        <button class="nav-btn" data-page="ventas" onclick="navigateTo('ventas')">
+            <span class="nav-icon">🛒</span>
+            <span>Ventas</span>
+        </button>
+        <button class="nav-btn" data-page="produccion" onclick="navigateTo('produccion')">
+            <span class="nav-icon">✨</span>
+            <span>Producción</span>
+        </button>
+        <button class="nav-btn" data-page="reportes" onclick="navigateTo('reportes')">
+            <span class="nav-icon">📊</span>
+            <span>Reportes</span>
+        </button>
+    </nav>
+</div>
+
+<!-- ==================== MODALES ==================== -->
+<div id="modalOverlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+
+    <!-- Modal: Categoría -->
+    <div id="modalCategoria" class="modal">
+        <div class="modal-header">
+            <div class="modal-title" id="catModalTitle">Nueva categoría</div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <form id="categoryForm" onsubmit="saveCategory(event)">
+            <input type="hidden" id="catId">
+            <div class="form-group">
+                <label class="form-label">Nombre de la categoría</label>
+                <input type="text" class="form-input" id="catNombre" required placeholder="Ej: Velas aromáticas">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="flex:1">Guardar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal: Producto -->
+    <div id="modalProducto" class="modal">
+        <div class="modal-header">
+            <div class="modal-title" id="prodModalTitle">Nuevo producto</div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <form id="productForm" onsubmit="saveProduct(event)">
+            <input type="hidden" id="prodId">
+            <div class="form-group">
+                <label class="form-label">Foto (opcional)</label>
+                <div class="form-photo-preview" id="prodPhotoPreview" onclick="document.getElementById('prodPhotoFile').click()" title="Subir o cambiar foto">
+                    📷
+                </div>
+                <input type="file" id="prodPhotoFile" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+                <input type="hidden" id="prodPhotoUrl">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre del producto *</label>
+                <input type="text" class="form-input" id="prodNombre" required placeholder="Ej: Vela aromática lavanda">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Categoría</label>
+                <select class="form-select" id="prodCategoria">
+                    <option value="">Sin categoría</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Precio de venta *</label>
+                    <input type="number" class="form-input" id="prodPrecio" required min="0" step="0.01" placeholder="$0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Costo (opcional)</label>
+                    <input type="number" class="form-input" id="prodCosto" min="0" step="0.01" placeholder="$0">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Stock actual</label>
+                    <input type="number" class="form-input" id="prodStock" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Stock mínimo</label>
+                    <input type="number" class="form-input" id="prodStockMin" min="0" value="0">
+                    <div class="form-hint">Te aviso cuando baje de acá</div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="flex:1">Guardar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal: Venta -->
+    <div id="modalVenta" class="modal">
+        <div class="modal-header">
+            <div class="modal-title" id="ventaModalTitle">Registrar venta</div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <form id="saleForm" onsubmit="saveSale(event)">
+            <input type="hidden" id="ventaId">
+            <div class="form-group">
+                <label class="form-label">Producto *</label>
+                <select class="form-select" id="ventaProducto" required onchange="onSaleProductChange()">
+                    <option value="">Elegí un producto</option>
+                </select>
+                <div class="form-hint" id="ventaStockHint"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Cantidad *</label>
+                    <input type="number" class="form-input" id="ventaCantidad" required min="1" value="1" onchange="updateSaleTotal()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Precio unitario *</label>
+                    <input type="number" class="form-input" id="ventaPrecio" required min="0" step="0.01" onchange="updateSaleTotal()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Total</label>
+                <div style="font-size:1.3rem;font-weight:800;color:var(--gold-dark);padding:8px 0" id="ventaTotal">$0</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" class="form-input" id="ventaFecha">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Medio de pago</label>
+                    <select class="form-select" id="ventaMedio">
+                        <option value="efectivo">💵 Efectivo</option>
+                        <option value="transferencia">🏦 Transferencia</option>
+                        <option value="otro">📋 Otro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Cliente (opcional)</label>
+                <input type="text" class="form-input" id="ventaCliente" placeholder="Nombre del cliente">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="flex:1">Guardar venta</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal: Producción -->
+    <div id="modalProduccion" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Registrar producción</div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <form id="productionForm" onsubmit="saveProduction(event)">
+            <div class="form-group">
+                <label class="form-label">Producto *</label>
+                <select class="form-select" id="prodProdProducto" required>
+                    <option value="">Elegí un producto</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Cantidad fabricada *</label>
+                    <input type="number" class="form-input" id="prodProdCantidad" required min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" class="form-input" id="prodProdFecha">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Notas (opcional)</label>
+                <textarea class="form-textarea" id="prodProdNotas" placeholder="Alguna nota sobre esta tanda..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancelar</button>
+                <button type="submit" class="btn btn-primary" style="flex:1">Guardar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal: Confirmación -->
+    <div id="modalConfirm" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">⚠️ Confirmación</div>
+            <button class="modal-close" onclick="closeModal();confirmResolve(false)">✕</button>
+        </div>
+        <p class="confirm-text" id="confirmText"></p>
+        <div class="confirm-actions">
+            <button class="btn btn-secondary" onclick="closeModal();confirmResolve(false)" style="flex:1">No, cancelar</button>
+            <button class="btn btn-danger" onclick="closeModal();confirmResolve(true)" style="flex:1" id="confirmOkBtn">Sí, dale</button>
+        </div>
+    </div>
+</div>
+
+<!-- Contenedor flotante de notificaciones -->
+<div id="toastContainer"></div>
+
+<!-- Indicador de guardado en la nube -->
+<div id="saveIndicator"></div>
+
+<!-- ==================== ARQUITECTURA MODULAR JAVASCRIPT ==================== -->
+<!-- 1. Configuración & Estado -->
+<script src="js/config.js"></script>
+<script src="js/state.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/utils.js"></script>
+
+<!-- 2. Módulos de Funcionalidad -->
+<script src="js/modules/auth.js"></script>
+<script src="js/modules/navigation.js"></script>
+<script src="js/modules/dashboard.js"></script>
+<script src="js/modules/categories.js"></script>
+<script src="js/modules/stock.js"></script>
+<script src="js/modules/sales.js"></script>
+<script src="js/modules/production.js"></script>
+<script src="js/modules/reports.js"></script>
+<script src="js/modules/samples.js"></script>
+
+<!-- 3. Bootstrap & Inicialización -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
