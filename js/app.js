@@ -32,7 +32,8 @@ async function initApp() {
 
 async function init() {
     // 1. Revisar configuración de Supabase
-    if (!window.isSupabaseConfigured()) {
+    const isConfigured = typeof window.isSupabaseConfigured === 'function' && window.isSupabaseConfigured();
+    if (!isConfigured) {
         const configAlert = document.getElementById('loginConfigAlert');
         if (configAlert) {
             configAlert.style.display = 'block';

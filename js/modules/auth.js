@@ -21,14 +21,15 @@ async function handleLogin(e) {
     if (e && e.preventDefault) e.preventDefault();
     if (isLoggingIn) return;
 
-    if (!window.isSupabaseConfigured()) {
+    const isConfigured = typeof window.isSupabaseConfigured === 'function' && window.isSupabaseConfigured();
+    if (!isConfigured) {
         const errorEl = document.getElementById('loginError');
-        errorEl.innerHTML = '⚠️ <strong>Falta configurar Supabase:</strong> Ingresá tu URL y clave en <code>js/config.js</code>.';
+        errorEl.innerHTML = '⚠️ <strong>Falta configurar Supabase:</strong> No se encontró el archivo de conexión <code>js/config.js</code>.';
         errorEl.style.display = 'block';
         return;
     }
 
-    const email = document.getElementById('loginEmail').value.trim();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
     const password = document.getElementById('loginPassword').value;
     const keep = document.getElementById('loginKeep').checked;
     const errorEl = document.getElementById('loginError');
@@ -105,7 +106,8 @@ async function handleLogin(e) {
 
 // Abrir modal para solicitar reseteo de contraseña
 function openForgotPasswordModal() {
-    if (!window.isSupabaseConfigured()) {
+    const isConfigured = typeof window.isSupabaseConfigured === 'function' && window.isSupabaseConfigured();
+    if (!isConfigured) {
         showToast('Falta configurar Supabase en js/config.js', 'warning');
         return;
     }
