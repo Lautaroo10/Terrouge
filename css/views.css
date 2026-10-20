@@ -10,11 +10,10 @@
     justify-content: center;
     padding: 20px;
 
-    /* The one bold moment: a warm gradient that suggests
-       candlelight glowing upward from below */
+    /* Borgoña: la firma visual de Terrouge */
     background:
-        radial-gradient(ellipse at 50% 100%, rgba(224, 120, 50, 0.12) 0%, transparent 60%),
-        linear-gradient(to top, #EDE5D8 0%, var(--hueso) 40%, #F5F1EB 100%);
+        radial-gradient(ellipse at 50% 100%, rgba(155, 58, 58, 0.15) 0%, transparent 60%),
+        linear-gradient(to top, #E8DDD0 0%, var(--hueso) 40%, #F5F1EB 100%);
 }
 
 .login-container {
@@ -38,7 +37,7 @@
 }
 
 .login-logo span {
-    color: var(--cera);
+    color: var(--borgona);
 }
 
 .login-subtitle {
@@ -59,7 +58,7 @@
 .login-keep input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: var(--cera);
+    accent-color: var(--borgona);
 }
 
 .login-keep span {
@@ -71,7 +70,7 @@
     display: block;
     text-align: right;
     font-size: 0.85rem;
-    color: var(--cera);
+    color: var(--borgona);
     margin-bottom: 24px;
     cursor: pointer;
 }
@@ -83,12 +82,14 @@
 .login-error {
     background: var(--error-fondo);
     color: var(--error);
-    padding: 10px 14px;
+    border: 1px solid var(--error);
+    padding: 12px 14px;
     border-radius: var(--radio-sm);
     font-size: 0.9rem;
     margin-bottom: 16px;
     display: none;
     text-align: left;
+    line-height: 1.45;
 }
 
 .login-config-alert {
@@ -251,7 +252,7 @@
 
 .tab-btn.active {
     color: var(--mecha);
-    border-bottom-color: var(--cera);
+    border-bottom-color: var(--borgona);
 }
 
 .search-bar {
@@ -427,7 +428,7 @@
 .sale-total {
     font-family: 'DM Serif Display', Georgia, serif;
     font-weight: 400;
-    color: var(--cera);
+    color: var(--borgona);
     font-size: 1.05rem;
 }
 
@@ -451,7 +452,7 @@
 }
 
 .sales-total-bar {
-    background: var(--mecha);
+    background: var(--borgona);
     color: var(--vela);
     border-radius: var(--radio);
     padding: 14px 18px;

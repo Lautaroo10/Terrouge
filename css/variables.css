@@ -14,6 +14,13 @@
     --ceniza: #8A7E6E;         /* Texto secundario */
     --vela: #FDFCF9;           /* Blanco de superficie — ligeramente cálido */
 
+    /* Borgoña — el rouge del logo */
+    --borgona: #9B3A3A;        /* Marca principal — borgoña profundo */
+    --borgona-dark: #7A2E2E;   /* Hover / pressed */
+    --borgona-soft: #B85555;   /* Acento claro sobre fondos oscuros */
+    --borgona-fondo: #F8EDEC;  /* Fondo tintado borgoña */
+    --gold-dark: #A8873A;      /* Dorado para texto sobre fondos claros */
+
     /* Estados — dentro del espectro cálido, baja saturación */
     --ok: #6B8F5E;
     --ok-fondo: #EFF5EC;

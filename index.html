@@ -41,10 +41,10 @@
         </div>
 
         <div id="loginError" class="login-error"></div>
-        <form id="loginForm" class="login-form" autocomplete="on">
+        <form id="loginForm" class="login-form" autocomplete="on" novalidate onsubmit="handleLogin(event)">
             <div class="form-group">
                 <label for="loginEmail" class="form-label">Email</label>
-                <input type="email" class="form-input" id="loginEmail" placeholder="tu@email.com" required autocomplete="email">
+                <input type="text" class="form-input" id="loginEmail" placeholder="tu@email.com" required autocomplete="email">
             </div>
             <div class="form-group">
                 <label for="loginPassword" class="form-label">Contraseña</label>
@@ -57,7 +57,7 @@
                 <input type="checkbox" id="loginKeep" checked>
                 <span>Mantener sesión iniciada</span>
             </label>
-            <a class="login-forgot" id="forgotBtn" role="button" tabindex="0">¿Olvidaste tu contraseña?</a>
+            <a class="login-forgot" id="forgotBtn" role="button" tabindex="0" onclick="openForgotPasswordModal()">¿Olvidaste tu contraseña?</a>
             <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">Iniciar sesión</button>
         </form>
     </div>
@@ -437,10 +437,20 @@
         </div>
         <form id="productionForm" onsubmit="saveProduction(event)">
             <div class="form-group">
-                <label class="form-label">Producto *</label>
+                <label class="form-label">Categoría (opcional)</label>
+                <select class="form-select" id="prodProdCategoria" onchange="onProductionCategoryChange()">
+                    <option value="">Todas las categorías</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Producto a fabricar *</label>
                 <select class="form-select" id="prodProdProducto" required>
                     <option value="">Elegí un producto</option>
                 </select>
+                <div id="prodNoProductsNotice" style="display:none; margin-top:8px; padding:10px 12px; background:var(--alerta-fondo); border:1px solid var(--alerta); border-radius:var(--radio-sm); font-size:0.85rem; color:var(--mecha);">
+                    <span>⚠️ No tenés productos cargados en esta categoría todavía.</span>
+                    <button type="button" class="btn btn-sm btn-secondary" onclick="closeModal();openProductModal();" style="margin-top:6px; width:100%;">➕ Crear un producto primero</button>
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -482,7 +492,7 @@
             <div class="modal-title">🔑 Recuperar contraseña</div>
             <button class="modal-close" onclick="closeModal()">✕</button>
         </div>
-        <form id="forgotPasswordForm">
+        <form id="forgotPasswordForm" onsubmit="handleForgotPasswordSubmit(event)">
             <p style="font-size:0.95rem; color:var(--brown-light); margin-bottom:16px;">
                 Ingresá tu correo electrónico y te enviaremos un enlace seguro para restablecer tu contraseña.
             </p>
@@ -504,7 +514,7 @@
             <div class="modal-title">🔒 Nueva contraseña</div>
             <button class="modal-close" onclick="closeModal()">✕</button>
         </div>
-        <form id="resetPasswordForm">
+        <form id="resetPasswordForm" onsubmit="handleResetPasswordSubmit(event)">
             <p style="font-size:0.95rem; color:var(--brown-light); margin-bottom:16px;">
                 Ingresá tu nueva clave para actualizar el acceso a tu cuenta.
             </p>

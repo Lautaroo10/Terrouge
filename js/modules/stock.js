@@ -67,6 +67,7 @@ function openProductModal(id = null) {
     document.getElementById('prodModalTitle').textContent = prod ? 'Editar producto' : 'Nuevo producto';
     document.getElementById('prodId').value = prod ? prod.id : '';
     document.getElementById('prodNombre').value = prod ? prod.nombre : '';
+    if (window.updateCategorySelects) window.updateCategorySelects();
     document.getElementById('prodCategoria').value = prod ? (prod.categoria_id || '') : '';
     document.getElementById('prodPrecio').value = prod ? prod.precio_venta : '';
     document.getElementById('prodCosto').value = prod ? (prod.costo_produccion || '') : '';

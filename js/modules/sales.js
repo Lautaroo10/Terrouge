@@ -86,13 +86,51 @@ function openSaleModal() {
     document.getElementById('ventaTotal').textContent = '$0';
     document.getElementById('ventaStockHint').textContent = '';
 
-    // Llenar select de productos
+    // Llenar select de productos agrupados por categoría
     const sel = document.getElementById('ventaProducto');
-    sel.innerHTML = '<option value="">Elegí un producto</option>' +
-        AppState.allProducts.map(p => `<option value="${p.id}" data-price="${p.precio_venta}" data-stock="${p.stock_actual}">${p.nombre} (stock: ${p.stock_actual})</option>`).join('');
+    sel.innerHTML = getSaleProductOptionsHtml('');
     sel.value = '';
 
     openModal('modalVenta');
+}
+
+function getSaleProductOptionsHtml(selectedId) {
+    if (!AppState.allProducts || AppState.allProducts.length === 0) {
+        return '<option value="">No hay productos disponibles</option>';
+    }
+
+    let html = '<option value="">Elegí un producto</option>';
+
+    if (AppState.allCategories && AppState.allCategories.length > 0) {
+        AppState.allCategories.forEach(cat => {
+            const prodsInCat = AppState.allProducts.filter(p => p.categoria_id === cat.id);
+            if (prodsInCat.length > 0) {
+                html += `<optgroup label="📂 ${cat.nombre}">`;
+                prodsInCat.forEach(p => {
+                    const isSel = p.id === selectedId ? 'selected' : '';
+                    html += `<option value="${p.id}" data-price="${p.precio_venta}" data-stock="${p.stock_actual}" ${isSel}>${p.nombre} (stock: ${p.stock_actual})</option>`;
+                });
+                html += `</optgroup>`;
+            }
+        });
+
+        const withoutCat = AppState.allProducts.filter(p => !p.categoria_id);
+        if (withoutCat.length > 0) {
+            html += `<optgroup label="📦 Sin categoría">`;
+            withoutCat.forEach(p => {
+                const isSel = p.id === selectedId ? 'selected' : '';
+                html += `<option value="${p.id}" data-price="${p.precio_venta}" data-stock="${p.stock_actual}" ${isSel}>${p.nombre} (stock: ${p.stock_actual})</option>`;
+            });
+            html += `</optgroup>`;
+        }
+    } else {
+        html += AppState.allProducts.map(p => {
+            const isSel = p.id === selectedId ? 'selected' : '';
+            return `<option value="${p.id}" data-price="${p.precio_venta}" data-stock="${p.stock_actual}" ${isSel}>${p.nombre} (stock: ${p.stock_actual})</option>`;
+        }).join('');
+    }
+
+    return html;
 }
 
 function openEditSaleModal(id) {
@@ -103,8 +141,7 @@ function openEditSaleModal(id) {
     document.getElementById('ventaId').value = sale.id;
 
     const sel = document.getElementById('ventaProducto');
-    sel.innerHTML = '<option value="">Elegí un producto</option>' +
-        AppState.allProducts.map(p => `<option value="${p.id}" data-price="${p.precio_venta}" data-stock="${p.stock_actual}">${p.nombre} (stock: ${p.stock_actual})</option>`).join('');
+    sel.innerHTML = getSaleProductOptionsHtml(sale.producto_id);
     sel.value = sale.producto_id;
 
     document.getElementById('ventaCantidad').value = sale.cantidad;

@@ -26,12 +26,12 @@
 }
 
 .btn-primary {
-    background: var(--mecha);
+    background: var(--borgona);
     color: var(--vela);
 }
 
 .btn-primary:hover {
-    background: #4A4035;
+    background: var(--borgona-dark);
     box-shadow: var(--sombra);
 }
 
@@ -278,7 +278,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(59, 50, 38, 0.45);
+    background: rgba(122, 46, 46, 0.45);
     z-index: 200;
     align-items: flex-end;
     justify-content: center;
@@ -367,7 +367,7 @@
 }
 
 .toast {
-    background: var(--mecha);
+    background: var(--borgona-dark);
     color: var(--vela);
     padding: 11px 18px;
     border-radius: var(--radio);
@@ -490,7 +490,7 @@
     width: 32px;
     height: 32px;
     border: 2px solid var(--pergamino);
-    border-top-color: var(--cera);
+    border-top-color: var(--borgona);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }

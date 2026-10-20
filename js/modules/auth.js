@@ -16,8 +16,10 @@ function togglePasswordVisibility(inputId, btn) {
 }
 
 // Iniciar sesión con email y contraseña
+let isLoggingIn = false;
 async function handleLogin(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
+    if (isLoggingIn) return;
 
     if (!window.isSupabaseConfigured()) {
         const errorEl = document.getElementById('loginError');
@@ -33,6 +35,30 @@ async function handleLogin(e) {
     const btn = document.getElementById('loginSubmitBtn');
 
     errorEl.style.display = 'none';
+
+    // Validación de campos vacíos o mal formados antes de enviar
+    if (!email) {
+        errorEl.innerHTML = '⚠️ <strong>Por favor ingresá tu correo electrónico.</strong>';
+        errorEl.style.display = 'block';
+        document.getElementById('loginEmail').focus();
+        return;
+    }
+
+    if (!email.includes('@') || !email.includes('.')) {
+        errorEl.innerHTML = '⚠️ <strong>Formato inválido:</strong> El usuario debe ser un correo electrónico válido (ejemplo: <code>tu@email.com</code>).';
+        errorEl.style.display = 'block';
+        document.getElementById('loginEmail').focus();
+        return;
+    }
+
+    if (!password) {
+        errorEl.innerHTML = '⚠️ <strong>Por favor ingresá tu contraseña.</strong>';
+        errorEl.style.display = 'block';
+        document.getElementById('loginPassword').focus();
+        return;
+    }
+
+    isLoggingIn = true;
     btn.textContent = 'Ingresando...';
     btn.disabled = true;
 
@@ -55,22 +81,23 @@ async function handleLogin(e) {
         const errStr = (err.message || '').toLowerCase();
 
         if (errStr.includes('invalid login') || errStr.includes('invalid credentials') || errStr.includes('grant')) {
-            msg = 'Email o contraseña incorrectos. Verificá que no haya mayúsculas o espacios de más.';
+            msg = '⚠️ <strong>Email o contraseña incorrectos.</strong> Verificá que no haya mayúsculas o espacios de más. Si no recordás tu contraseña, hacé clic abajo en "¿Olvidaste tu contraseña?".';
         } else if (errStr.includes('email not confirmed')) {
-            msg = 'Tu email aún no está confirmado. Por favor revisá tu bandeja de entrada o spam para confirmar la cuenta.';
+            msg = '⚠️ <strong>Email aún no confirmado:</strong> Por favor revisá tu bandeja de entrada o spam para confirmar tu cuenta en el enlace que te envió Supabase.';
         } else if (errStr.includes('user not found')) {
-            msg = 'No encontramos ninguna cuenta con este email.';
+            msg = '⚠️ <strong>Usuario no encontrado:</strong> No encontramos ninguna cuenta registrada con este email.';
         } else if (errStr.includes('rate limit')) {
-            msg = 'Demasiados intentos fallidos seguidos. Por favor esperá unos minutos antes de reintentar.';
+            msg = '⚠️ <strong>Demasiados intentos fallidos:</strong> Por seguridad, esperá unos minutos antes de reintentar.';
         } else if (errStr.includes('fetch') || errStr.includes('network')) {
-            msg = 'No hay conexión a internet o el servidor de Supabase no responde.';
+            msg = '⚠️ <strong>Problema de conexión:</strong> No se pudo conectar con el servidor de Supabase. Verificá tu conexión a internet.';
         } else if (err.message) {
-            msg = err.message;
+            msg = `⚠️ ${err.message}`;
         }
 
-        errorEl.textContent = msg;
+        errorEl.innerHTML = msg;
         errorEl.style.display = 'block';
     } finally {
+        isLoggingIn = false;
         btn.textContent = 'Iniciar sesión';
         btn.disabled = false;
     }

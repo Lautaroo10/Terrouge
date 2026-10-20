@@ -9,8 +9,8 @@
     left: 0;
     right: 0;
     height: var(--header-height);
-    background: var(--vela);
-    border-bottom: 1px solid var(--pergamino);
+    background: var(--borgona);
+    border-bottom: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,18 +22,18 @@
     font-family: 'DM Serif Display', Georgia, serif;
     font-size: 1.25rem;
     font-weight: 400;
-    color: var(--mecha);
-    letter-spacing: 0.02em;
+    color: var(--vela);
+    letter-spacing: 0.03em;
 }
 
 .header-brand span {
-    color: var(--cera);
+    color: var(--cera-suave);
 }
 
 .header-logout {
     background: none;
     border: none;
-    color: var(--ceniza);
+    color: rgba(255, 255, 255, 0.65);
     font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
@@ -45,7 +45,7 @@
 }
 
 .header-logout:hover {
-    color: var(--error);
+    color: var(--vela);
 }
 
 /* ========== BOTTOM NAVIGATION ========== */
@@ -55,7 +55,7 @@
     left: 0;
     right: 0;
     height: var(--nav-height);
-    background: var(--mecha);
+    background: var(--borgona-dark);
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -149,7 +149,7 @@
     }
 
     .nav-btn.active {
-        color: var(--cera);
+        color: var(--borgona);
     }
 
     .nav-btn .nav-icon {

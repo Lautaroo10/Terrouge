@@ -50,10 +50,13 @@ function updateCategorySelects() {
     const prodCat = document.getElementById('prodCategoria');
     const filterCat = document.getElementById('productCategoryFilter');
     const repCat = document.getElementById('reportCategory');
+    const prodProdCat = document.getElementById('prodProdCategoria');
 
     if (prodCat) prodCat.innerHTML = options;
     if (filterCat) filterCat.innerHTML = filterOptions;
     if (repCat) repCat.innerHTML = reportOptions;
+    if (prodProdCat) prodProdCat.innerHTML = '<option value="">Todas las categorías</option>' +
+        AppState.allCategories.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
 }
 
 function openCategoryModal(id = null) {

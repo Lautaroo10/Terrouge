@@ -30,7 +30,7 @@ input, select, textarea, button {
 }
 
 a {
-    color: var(--cera);
+    color: var(--borgona);
     text-decoration: none;
 }
 
@@ -87,6 +87,6 @@ img {
 
 /* Focus visible — accesibilidad */
 :focus-visible {
-    outline: 2px solid var(--cera);
+    outline: 2px solid var(--borgona);
     outline-offset: 2px;
 }
