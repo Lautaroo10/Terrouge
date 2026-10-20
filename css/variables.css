@@ -1,41 +1,42 @@
 /* ============================================================
    TERROUGE — Variables & Design Tokens
-   Paleta de colores cálida y artesanal (Velas & Imaginería)
+   Paleta derivada de los materiales: cera, mecha, llama, ceniza
    ============================================================ */
 
 :root {
-    /* Paleta Terrouge */
-    --cream: #FFF8F0;
-    --cream-dark: #F5EDE3;
-    --beige: #F0E0CC;
-    --gold: #C49A45;
-    --gold-light: #D9B76A;
-    --gold-dark: #A67D30;
-    --brown: #6B4E2E;
-    --brown-dark: #4A3520;
-    --brown-light: #8B7355;
-    --white: #FFFFFF;
+    /* Paleta Terrouge — materiales reales */
+    --hueso: #F2EDE4;          /* Fondo — cera de abeja sin blanquear */
+    --pergamino: #E8E0D2;      /* Superficies secundarias, inputs */
+    --mecha: #3B3226;          /* Texto primario — mecha quemada */
+    --cera: #C4A265;           /* Acento dorado — cera derretida */
+    --cera-suave: #D4B87A;     /* Acento claro */
+    --llama: #E07832;          /* Acento fuerte — llama (uso mínimo) */
+    --ceniza: #8A7E6E;         /* Texto secundario */
+    --vela: #FDFCF9;           /* Blanco de superficie — ligeramente cálido */
 
-    /* Estados y Feedback */
-    --success: #5EA85E;
-    --success-bg: #E8F5E8;
-    --danger: #CC4A3F;
-    --danger-bg: #FDE8E6;
-    --warning: #D49B30;
-    --warning-bg: #FFF3D6;
-    --info: #5B9BD5;
-    --info-bg: #E3F0FC;
+    /* Estados — dentro del espectro cálido, baja saturación */
+    --ok: #6B8F5E;
+    --ok-fondo: #EFF5EC;
+    --alerta: #C49A3D;
+    --alerta-fondo: #FBF4E0;
+    --error: #B5453A;
+    --error-fondo: #F8EDED;
+    --info: #6A8CA8;
+    --info-fondo: #EDF3F8;
 
-    /* Sombras y Elevación */
-    --shadow: 0 2px 12px rgba(74, 53, 32, 0.08);
-    --shadow-lg: 0 4px 24px rgba(74, 53, 32, 0.15);
+    /* Elevación — sutil, cálida */
+    --sombra: 0 1px 4px rgba(59, 50, 38, 0.06);
+    --sombra-lg: 0 4px 16px rgba(59, 50, 38, 0.1);
 
-    /* Radios */
-    --radius: 14px;
-    --radius-sm: 8px;
-    --radius-lg: 20px;
+    /* Radios — más contenidos, menos burbuja */
+    --radio: 10px;
+    --radio-sm: 6px;
+    --radio-lg: 14px;
 
     /* Dimensiones clave */
-    --nav-height: 68px;
-    --header-height: 60px;
+    --nav-height: 64px;
+    --header-height: 56px;
+
+    /* Transición base */
+    --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 }

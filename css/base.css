@@ -1,5 +1,6 @@
 /* ============================================================
    TERROUGE — Base & Reset
+   DM Serif Display + DM Sans — elegancia artesanal
    ============================================================ */
 
 *, *::before, *::after {
@@ -14,12 +15,13 @@ html {
 }
 
 body {
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--cream);
-    color: var(--brown-dark);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--hueso);
+    color: var(--mecha);
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
 }
 
 input, select, textarea, button {
@@ -28,38 +30,37 @@ input, select, textarea, button {
 }
 
 a {
-    color: var(--gold-dark);
+    color: var(--cera);
     text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 img {
     max-width: 100%;
 }
 
-/* Scrollbar personalizada */
+/* Scrollbar — discreta */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--cream-dark);
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--beige);
+    background: var(--pergamino);
     border-radius: 3px;
 }
 
-/* Animaciones */
+/* Animaciones — solo las esenciales */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideUp {
@@ -69,4 +70,23 @@ img {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+@keyframes gentleAppear {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus visible — accesibilidad */
+:focus-visible {
+    outline: 2px solid var(--cera);
+    outline-offset: 2px;
 }

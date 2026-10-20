@@ -42,11 +42,23 @@ async function init() {
     // 2. Vincular listeners de formularios principales
     const loginForm = document.getElementById('loginForm');
     const forgotBtn = document.getElementById('forgotBtn');
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
     const logoutBtn = document.getElementById('logoutBtn');
 
     if (loginForm) loginForm.addEventListener('submit', window.handleLogin);
-    if (forgotBtn) forgotBtn.addEventListener('click', window.handleForgotPassword);
+    if (forgotBtn) forgotBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.openForgotPasswordModal();
+    });
+    if (forgotPasswordForm) forgotPasswordForm.addEventListener('submit', window.handleForgotPasswordSubmit);
+    if (resetPasswordForm) resetPasswordForm.addEventListener('submit', window.handleResetPasswordSubmit);
     if (logoutBtn) logoutBtn.addEventListener('click', window.handleLogout);
+
+    // 2.1. Escuchar eventos de recuperación de contraseña de Supabase
+    if (window.setupAuthListeners) {
+        window.setupAuthListeners();
+    }
 
     // 3. Listeners de búsqueda y filtrado de stock
     const productSearch = document.getElementById('productSearch');

@@ -8,36 +8,44 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--cream) 0%, var(--beige) 50%, var(--cream-dark) 100%);
     padding: 20px;
+
+    /* The one bold moment: a warm gradient that suggests
+       candlelight glowing upward from below */
+    background:
+        radial-gradient(ellipse at 50% 100%, rgba(224, 120, 50, 0.12) 0%, transparent 60%),
+        linear-gradient(to top, #EDE5D8 0%, var(--hueso) 40%, #F5F1EB 100%);
 }
 
 .login-container {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    padding: 40px 30px;
+    background: var(--vela);
+    border-radius: var(--radio-lg);
+    border: 1px solid var(--pergamino);
+    padding: 40px 28px;
     width: 100%;
-    max-width: 400px;
+    max-width: 380px;
     text-align: center;
-    animation: fadeInUp 0.5s ease;
+    animation: gentleAppear 0.4s var(--ease);
 }
 
 .login-logo {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: var(--brown-dark);
-    margin-bottom: 6px;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--mecha);
+    margin-bottom: 4px;
+    letter-spacing: 0.03em;
 }
 
 .login-logo span {
-    color: var(--gold);
+    color: var(--cera);
 }
 
 .login-subtitle {
-    color: var(--brown-light);
-    font-size: 0.95rem;
-    margin-bottom: 24px;
+    color: var(--ceniza);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+    font-weight: 400;
 }
 
 .login-keep {
@@ -49,21 +57,21 @@
 }
 
 .login-keep input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--gold);
+    width: 18px;
+    height: 18px;
+    accent-color: var(--cera);
 }
 
 .login-keep span {
     font-size: 0.9rem;
-    color: var(--brown-light);
+    color: var(--ceniza);
 }
 
 .login-forgot {
     display: block;
     text-align: right;
     font-size: 0.85rem;
-    color: var(--gold-dark);
+    color: var(--cera);
     margin-bottom: 24px;
     cursor: pointer;
 }
@@ -73,10 +81,10 @@
 }
 
 .login-error {
-    background: var(--danger-bg);
-    color: var(--danger);
+    background: var(--error-fondo);
+    color: var(--error);
     padding: 10px 14px;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radio-sm);
     font-size: 0.9rem;
     margin-bottom: 16px;
     display: none;
@@ -84,73 +92,110 @@
 }
 
 .login-config-alert {
-    background: var(--warning-bg);
-    border: 1px solid var(--warning);
-    border-radius: var(--radius-sm);
+    background: var(--alerta-fondo);
+    border: 1px solid var(--alerta);
+    border-radius: var(--radio-sm);
     padding: 12px 14px;
     margin-bottom: 20px;
     font-size: 0.85rem;
-    color: #8B6914;
+    color: #7A6320;
     text-align: left;
     display: none;
 }
 
 /* ========== 2. DASHBOARD ========== */
+
+/* Featured stats — two large blocks, not four identical cards */
 .dash-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 6px;
 }
 
 .stat-card {
-    background: var(--white);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 16px;
-    text-align: center;
+    background: var(--vela);
+    border-radius: var(--radio);
+    border: 1px solid var(--pergamino);
+    padding: 18px 16px;
+    text-align: left;
+}
+
+.stat-card:first-child,
+.stat-card:nth-child(2) {
+    /* The first two stats are the featured ones */
+    padding: 22px 18px;
 }
 
 .stat-icon {
-    font-size: 1.6rem;
-    margin-bottom: 4px;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    opacity: 0.6;
 }
 
 .stat-value {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--brown-dark);
-    line-height: 1.2;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--mecha);
+    line-height: 1.1;
+}
+
+.stat-card:first-child .stat-value,
+.stat-card:nth-child(2) .stat-value {
+    font-size: 1.9rem;
 }
 
 .stat-label {
     font-size: 0.8rem;
-    color: var(--brown-light);
-    font-weight: 600;
-    margin-top: 2px;
+    color: var(--ceniza);
+    font-weight: 400;
+    margin-top: 4px;
+}
+
+/* Inline secondary stats */
+.dash-secondary-stats {
+    color: var(--ceniza);
+    font-size: 0.9rem;
+    padding: 10px 0 16px;
+    line-height: 1.7;
+}
+
+.dash-secondary-stats strong {
+    color: var(--mecha);
+    font-weight: 500;
+}
+
+/* Separator */
+.dash-separator {
+    border: none;
+    border-top: 1px solid var(--pergamino);
+    margin: 4px 0 16px;
 }
 
 .quick-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 20px;
 }
 
 .section-title {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--brown-dark);
-    margin-bottom: 12px;
-    margin-top: 8px;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--mecha);
+    margin-bottom: 10px;
+    margin-top: 4px;
 }
 
+/* Top sellers — table-like, no ranking badges */
 .top-seller-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--cream-dark);
+    padding: 9px 0;
+    border-bottom: 1px solid var(--pergamino);
 }
 
 .top-seller-item:last-child {
@@ -158,13 +203,13 @@
 }
 
 .top-seller-rank {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    background: var(--gold-light);
-    color: var(--white);
-    font-weight: 800;
-    font-size: 0.85rem;
+    background: var(--pergamino);
+    color: var(--ceniza);
+    font-weight: 500;
+    font-size: 0.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -172,23 +217,22 @@
 }
 
 .top-seller-name {
-    font-weight: 600;
+    font-weight: 500;
     flex: 1;
+    font-size: 0.95rem;
 }
 
 .top-seller-qty {
-    color: var(--brown-light);
+    color: var(--ceniza);
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 /* ========== 3. STOCK / PRODUCTOS ========== */
 .tab-bar {
     display: flex;
-    gap: 4px;
-    background: var(--cream-dark);
-    border-radius: var(--radius-sm);
-    padding: 4px;
+    gap: 0;
+    border-bottom: 1px solid var(--pergamino);
     margin-bottom: 16px;
 }
 
@@ -197,18 +241,17 @@
     padding: 10px;
     border: none;
     background: transparent;
-    border-radius: 6px;
-    font-weight: 700;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
     font-size: 0.9rem;
-    color: var(--brown-light);
+    color: var(--ceniza);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
 }
 
 .tab-btn.active {
-    background: var(--white);
-    color: var(--brown-dark);
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    color: var(--mecha);
+    border-bottom-color: var(--cera);
 }
 
 .search-bar {
@@ -219,40 +262,40 @@
 
 .search-input {
     flex: 1;
-    padding: 12px 16px;
-    border: 2px solid var(--beige);
-    border-radius: var(--radius-sm);
-    background: var(--white);
-    font-size: 1rem;
-    color: var(--brown-dark);
-    transition: border-color 0.2s;
+    padding: 11px 14px;
+    border: 1px solid var(--pergamino);
+    border-radius: var(--radio-sm);
+    background: var(--vela);
+    font-size: 0.95rem;
+    color: var(--mecha);
+    transition: border-color 0.2s var(--ease);
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--gold);
+    border-color: var(--cera);
 }
 
 .search-input::placeholder {
-    color: var(--brown-light);
-    opacity: 0.6;
+    color: var(--ceniza);
+    opacity: 0.5;
 }
 
 .filter-select {
-    padding: 12px 14px;
-    border: 2px solid var(--beige);
-    border-radius: var(--radius-sm);
-    background: var(--white);
-    color: var(--brown-dark);
+    padding: 11px 12px;
+    border: 1px solid var(--pergamino);
+    border-radius: var(--radio-sm);
+    background: var(--vela);
+    color: var(--mecha);
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    min-width: 120px;
+    min-width: 110px;
 }
 
 .filter-select:focus {
     outline: none;
-    border-color: var(--gold);
+    border-color: var(--cera);
 }
 
 .product-card {
@@ -262,14 +305,14 @@
 }
 
 .product-photo {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-    background: var(--cream-dark);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radio-sm);
+    background: var(--pergamino);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     flex-shrink: 0;
     overflow: hidden;
 }
@@ -286,8 +329,8 @@
 }
 
 .product-name {
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -295,32 +338,32 @@
 
 .product-category {
     font-size: 0.8rem;
-    color: var(--brown-light);
-    font-weight: 600;
+    color: var(--ceniza);
+    font-weight: 400;
 }
 
 .product-meta {
     display: flex;
     gap: 12px;
-    margin-top: 4px;
+    margin-top: 3px;
     font-size: 0.85rem;
 }
 
 .product-stock {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .product-stock.low {
-    color: var(--warning);
+    color: var(--alerta);
 }
 
 .product-stock.out {
-    color: var(--danger);
+    color: var(--error);
 }
 
 .product-price {
-    color: var(--gold-dark);
-    font-weight: 700;
+    color: var(--cera);
+    font-weight: 500;
 }
 
 .product-actions {
@@ -333,16 +376,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 16px;
+    padding: 12px 14px;
 }
 
 .category-name {
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .category-count {
-    color: var(--brown-light);
+    color: var(--ceniza);
     font-size: 0.85rem;
 }
 
@@ -352,51 +395,53 @@
 }
 
 .sale-card.anulada {
-    opacity: 0.5;
+    opacity: 0.45;
 }
 
 .sale-card.anulada::after {
-    content: 'ANULADA';
+    content: 'Anulada';
     position: absolute;
     top: 10px;
     right: 10px;
-    background: var(--danger);
+    background: var(--error);
     color: white;
     font-size: 0.7rem;
-    font-weight: 800;
+    font-weight: 500;
     padding: 2px 8px;
     border-radius: 4px;
+    letter-spacing: 0.02em;
 }
 
 .sale-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .sale-product {
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 0.95rem;
 }
 
 .sale-total {
-    font-weight: 800;
-    color: var(--gold-dark);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
+    color: var(--cera);
     font-size: 1.05rem;
 }
 
 .sale-details {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 16px;
+    gap: 6px 14px;
     font-size: 0.85rem;
-    color: var(--brown-light);
+    color: var(--ceniza);
     margin-bottom: 8px;
 }
 
 .sale-detail {
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .sale-actions {
@@ -406,20 +451,21 @@
 }
 
 .sales-total-bar {
-    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-    color: var(--white);
-    border-radius: var(--radius);
+    background: var(--mecha);
+    color: var(--vela);
+    border-radius: var(--radio);
     padding: 14px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .sales-total-value {
+    font-family: 'DM Serif Display', Georgia, serif;
     font-size: 1.3rem;
-    font-weight: 800;
+    font-weight: 400;
 }
 
 .date-range {
@@ -431,8 +477,8 @@
 
 .date-range span {
     font-size: 0.85rem;
-    color: var(--brown-light);
-    font-weight: 600;
+    color: var(--ceniza);
+    font-weight: 400;
 }
 
 /* ========== 5. PRODUCCIÓN ========== */
@@ -443,13 +489,13 @@
 }
 
 .prod-qty {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: var(--success-bg);
-    color: var(--success);
-    font-weight: 800;
-    font-size: 1.1rem;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radio-sm);
+    background: var(--ok-fondo);
+    color: var(--ok);
+    font-weight: 500;
+    font-size: 1.05rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -461,18 +507,18 @@
 }
 
 .prod-name {
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .prod-date {
     font-size: 0.85rem;
-    color: var(--brown-light);
-    font-weight: 600;
+    color: var(--ceniza);
+    font-weight: 400;
 }
 
 .prod-notes {
     font-size: 0.8rem;
-    color: var(--brown-light);
+    color: var(--ceniza);
     font-style: italic;
     margin-top: 2px;
 }
@@ -488,20 +534,20 @@
 .report-filters input[type="date"],
 .report-filters select {
     padding: 10px 12px;
-    border: 2px solid var(--beige);
-    border-radius: var(--radius-sm);
-    background: var(--white);
+    border: 1px solid var(--pergamino);
+    border-radius: var(--radio-sm);
+    background: var(--vela);
     font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--brown-dark);
+    font-weight: 500;
+    color: var(--mecha);
     flex: 1;
-    min-width: 130px;
+    min-width: 120px;
 }
 
 .report-filters input:focus,
 .report-filters select:focus {
     outline: none;
-    border-color: var(--gold);
+    border-color: var(--cera);
 }
 
 .report-summary {
@@ -512,35 +558,37 @@
 }
 
 .report-stat {
-    background: var(--white);
-    border-radius: var(--radius-sm);
+    background: var(--vela);
+    border-radius: var(--radio-sm);
+    border: 1px solid var(--pergamino);
     padding: 14px;
-    text-align: center;
-    box-shadow: var(--shadow);
+    text-align: left;
 }
 
 .report-stat-value {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: var(--brown-dark);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--mecha);
 }
 
 .report-stat-label {
     font-size: 0.8rem;
-    color: var(--brown-light);
-    font-weight: 600;
+    color: var(--ceniza);
+    font-weight: 400;
+    margin-top: 2px;
 }
 
 .chart-container {
-    background: var(--white);
-    border-radius: var(--radius);
+    background: var(--vela);
+    border-radius: var(--radio);
+    border: 1px solid var(--pergamino);
     padding: 16px;
-    box-shadow: var(--shadow);
     margin-bottom: 16px;
 }
 
 .chart-container canvas {
-    max-height: 280px;
+    max-height: 260px;
 }
 
 .export-buttons {
@@ -550,6 +598,6 @@
 }
 
 .load-more-btn {
-    margin: 16px auto;
+    margin: 14px auto;
     display: block;
 }

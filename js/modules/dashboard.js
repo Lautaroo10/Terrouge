@@ -4,6 +4,16 @@
 
 async function loadDashboard() {
     try {
+        // 0. Título con fecha funcional
+        const greetingEl = document.getElementById('dashGreeting');
+        if (greetingEl) {
+            const hoy = new Date();
+            const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+            const fechaTexto = hoy.toLocaleDateString('es-AR', opciones);
+            // Capitalize first letter
+            greetingEl.textContent = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+        }
+
         // 1. Obtener productos
         const { data: products, error: prodErr } = await supabase.from('productos').select('*');
         if (prodErr) throw prodErr;

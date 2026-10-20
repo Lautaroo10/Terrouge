@@ -9,87 +9,88 @@
     left: 0;
     right: 0;
     height: var(--header-height);
-    background: var(--white);
-    border-bottom: 1px solid var(--beige);
+    background: var(--vela);
+    border-bottom: 1px solid var(--pergamino);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
     z-index: 100;
-    box-shadow: 0 1px 4px rgba(74, 53, 32, 0.05);
 }
 
 .header-brand {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--brown-dark);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--mecha);
+    letter-spacing: 0.02em;
 }
 
 .header-brand span {
-    color: var(--gold);
+    color: var(--cera);
 }
 
 .header-logout {
     background: none;
     border: none;
-    color: var(--brown-light);
+    color: var(--ceniza);
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
     padding: 8px 12px;
-    border-radius: var(--radius-sm);
-    transition: all 0.2s;
+    border-radius: var(--radio-sm);
+    transition: color 0.2s var(--ease);
+    white-space: nowrap;
+    z-index: 102;
 }
 
 .header-logout:hover {
-    background: var(--cream-dark);
-    color: var(--danger);
+    color: var(--error);
 }
 
-/* ========== BOTTOM NAVIGATION (MÓVIL) ========== */
+/* ========== BOTTOM NAVIGATION ========== */
 #bottomNav {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     height: var(--nav-height);
-    background: var(--brown-dark);
+    background: var(--mecha);
     display: flex;
     align-items: center;
     justify-content: space-around;
     z-index: 100;
     padding-bottom: env(safe-area-inset-bottom, 0);
-    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.7rem;
-    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.65rem;
+    font-weight: 500;
     cursor: pointer;
     padding: 6px 8px;
-    border-radius: 10px;
-    transition: all 0.2s;
-    min-width: 58px;
+    border-radius: var(--radio-sm);
+    transition: color 0.2s var(--ease);
+    min-width: 54px;
 }
 
 .nav-btn .nav-icon {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     line-height: 1;
 }
 
 .nav-btn.active {
-    color: var(--gold-light);
+    color: var(--cera-suave);
 }
 
 .nav-btn:active {
-    transform: scale(0.92);
+    transform: scale(0.93);
 }
 
 /* ========== MAIN CONTENT & PÁGINAS ========== */
@@ -98,7 +99,7 @@
 }
 
 .app-main {
-    padding-top: calc(var(--header-height) + 12px);
+    padding-top: calc(var(--header-height) + 16px);
     padding-bottom: calc(var(--nav-height) + 20px);
     min-height: 100vh;
 }
@@ -106,18 +107,22 @@
 .page {
     display: none;
     padding: 0 16px;
+    max-width: 640px;
+    margin: 0 auto;
 }
 
 .page.active {
     display: block;
-    animation: fadeIn 0.25s ease;
+    animation: fadeIn 0.2s var(--ease);
 }
 
 .page-title {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--brown-dark);
-    margin-bottom: 16px;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--mecha);
+    margin-bottom: 18px;
+    line-height: 1.2;
 }
 
 /* ========== RESPONSIVE ESCRITORIO (>= 768px) ========== */
@@ -127,33 +132,36 @@
         bottom: auto;
         height: var(--header-height);
         left: auto;
-        right: 0;
+        right: 140px;
         width: auto;
-        gap: 4px;
-        padding: 0 16px;
+        gap: 6px;
+        padding: 0 12px;
         background: transparent;
         box-shadow: none;
+        z-index: 101;
     }
 
     .nav-btn {
         flex-direction: row;
-        gap: 6px;
-        color: var(--brown-light);
+        gap: 5px;
+        color: var(--ceniza);
         font-size: 0.85rem;
     }
 
     .nav-btn.active {
-        color: var(--gold-dark);
+        color: var(--cera);
     }
 
     .nav-btn .nav-icon {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .app-main {
         padding-bottom: 20px;
-        max-width: 800px;
-        margin: 0 auto;
+    }
+
+    .page {
+        max-width: 640px;
     }
 
     .modal-overlay {
@@ -161,16 +169,17 @@
     }
 
     .modal {
-        border-radius: 20px;
+        border-radius: var(--radio-lg);
     }
 
     .btn-fab {
         bottom: 24px;
-        right: calc(50% - 400px + 20px);
+        right: calc(50% - 320px + 16px);
     }
 
+    /* Dashboard stats on desktop: still two columns but wider */
     .dash-stats {
-        grid-template-columns: repeat(4, 1fr) !important;
+        grid-template-columns: 1fr 1fr !important;
     }
 
     .quick-actions {
@@ -180,7 +189,7 @@
 
     .quick-actions .btn-quick {
         flex: 1;
-        min-width: 200px;
+        min-width: 180px;
     }
 
     .report-summary {

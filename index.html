@@ -13,7 +13,7 @@
     <!-- Fuentes Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
     <!-- Librerías Externas -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -43,18 +43,21 @@
         <div id="loginError" class="login-error"></div>
         <form id="loginForm" class="login-form" autocomplete="on">
             <div class="form-group">
-                <label for="loginEmail">Email</label>
-                <input type="email" id="loginEmail" placeholder="tu@email.com" required autocomplete="email">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-input" id="loginEmail" placeholder="tu@email.com" required autocomplete="email">
             </div>
             <div class="form-group">
-                <label for="loginPassword">Contraseña</label>
-                <input type="password" id="loginPassword" placeholder="Tu contraseña" required autocomplete="current-password">
+                <label for="loginPassword" class="form-label">Contraseña</label>
+                <div class="password-input-wrapper">
+                    <input type="password" class="form-input" id="loginPassword" placeholder="Tu contraseña" required autocomplete="current-password">
+                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('loginPassword', this)" title="Ver u ocultar contraseña" tabindex="-1">👁️</button>
+                </div>
             </div>
             <label class="login-keep">
                 <input type="checkbox" id="loginKeep" checked>
                 <span>Mantener sesión iniciada</span>
             </label>
-            <a class="login-forgot" id="forgotBtn">¿Olvidaste tu contraseña?</a>
+            <a class="login-forgot" id="forgotBtn" role="button" tabindex="0">¿Olvidaste tu contraseña?</a>
             <button type="submit" class="btn btn-primary btn-block" id="loginSubmitBtn">Iniciar sesión</button>
         </form>
     </div>
@@ -73,7 +76,7 @@
 
         <!-- ===== VISTA: DASHBOARD / INICIO ===== -->
         <section id="pageDashboard" class="page active">
-            <h1 class="page-title">¡Hola! 👋</h1>
+            <h1 class="page-title" id="dashGreeting">Inicio</h1>
 
             <!-- Recordatorio de Respaldo -->
             <div id="backupReminder" class="alert-banner alert-info" style="display:none">
@@ -85,52 +88,48 @@
                 <button class="alert-close" id="backupReminderClose" title="Cerrar aviso">✕</button>
             </div>
 
-            <!-- Métricas / Indicadores Rápidos -->
+            <!-- Featured stats — dos grandes -->
             <div class="dash-stats" id="dashStats">
                 <div class="stat-card">
-                    <div class="stat-icon">📦</div>
-                    <div class="stat-value" id="statTotalStock">-</div>
-                    <div class="stat-label">Unidades en stock</div>
+                    <div class="stat-value" id="statTotalStock">–</div>
+                    <div class="stat-label">unidades en stock</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🛒</div>
-                    <div class="stat-value" id="statVentasHoy">-</div>
-                    <div class="stat-label">Ventas hoy</div>
+                    <div class="stat-value" id="statVentasMes">–</div>
+                    <div class="stat-label">vendido este mes</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">💰</div>
-                    <div class="stat-value" id="statVentasMes">-</div>
-                    <div class="stat-label">Ventas del mes</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📈</div>
-                    <div class="stat-value" id="statGanancia">-</div>
-                    <div class="stat-label">Ganancia est. del mes</div>
-                </div>
+            </div>
+
+            <!-- Secondary stats as inline text -->
+            <div class="dash-secondary-stats">
+                Hoy: <strong id="statVentasHoy">–</strong> &nbsp;·&nbsp; Ganancia est.: <strong id="statGanancia">–</strong>
             </div>
 
             <!-- Alertas de Stock Bajo / Agotado -->
             <div id="lowStockAlerts"></div>
 
-            <!-- Accesos Rápidos para mamá -->
-            <div class="section-title">Acciones rápidas</div>
+            <hr class="dash-separator">
+
+            <!-- Accesos Rápidos -->
             <div class="quick-actions">
                 <button class="btn btn-quick" onclick="openSaleModal()">
-                    <span class="btn-quick-icon" style="background:var(--gold-light);color:white">🛒</span>
+                    <span class="btn-quick-icon" style="background:var(--alerta-fondo);color:var(--alerta)">🛒</span>
                     Registrar venta
                 </button>
                 <button class="btn btn-quick" onclick="openProductionModal()">
-                    <span class="btn-quick-icon" style="background:var(--success-bg);color:var(--success)">✨</span>
-                    Cargué producción nueva
+                    <span class="btn-quick-icon" style="background:var(--ok-fondo);color:var(--ok)">✨</span>
+                    Cargar producción
                 </button>
                 <button class="btn btn-quick" onclick="navigateTo('stock')">
-                    <span class="btn-quick-icon" style="background:var(--info-bg);color:var(--info)">📦</span>
+                    <span class="btn-quick-icon" style="background:var(--info-fondo);color:var(--info)">📦</span>
                     Ver stock
                 </button>
             </div>
 
-            <!-- Ranking: Productos más vendidos -->
-            <div class="section-title">🏆 Más vendidos (últimos 30 días)</div>
+            <hr class="dash-separator">
+
+            <!-- Productos más vendidos -->
+            <div class="section-title">Más vendidos</div>
             <div class="card" id="topSellersCard">
                 <div id="topSellersList">
                     <div class="empty-state"><p>Todavía no hay ventas registradas</p></div>
@@ -139,14 +138,14 @@
 
             <!-- Banner de Datos de Ejemplo -->
             <div id="sampleDataBanner" class="sample-banner" style="display:none">
-                <p>📋 Tenés productos de ejemplo cargados. Cuando quieras empezar de cero:</p>
-                <button class="btn btn-sm btn-danger" onclick="clearSampleData()">🗑️ Borrar datos de ejemplo</button>
+                <p>Tenés productos de ejemplo cargados. Cuando quieras empezar de cero:</p>
+                <button class="btn btn-sm btn-danger" onclick="clearSampleData()">Borrar datos de ejemplo</button>
             </div>
         </section>
 
         <!-- ===== VISTA: STOCK ===== -->
         <section id="pageStock" class="page">
-            <h1 class="page-title">📦 Stock</h1>
+            <h1 class="page-title">Stock</h1>
 
             <!-- Pestañas internas -->
             <div class="tab-bar">
@@ -183,7 +182,7 @@
 
         <!-- ===== VISTA: VENTAS ===== -->
         <section id="pageVentas" class="page">
-            <h1 class="page-title">🛒 Ventas</h1>
+            <h1 class="page-title">Ventas</h1>
 
             <button class="btn btn-primary btn-block" onclick="openSaleModal()" style="margin-bottom:14px">
                 ➕ Registrar venta
@@ -211,7 +210,7 @@
 
         <!-- ===== VISTA: PRODUCCIÓN ===== -->
         <section id="pageProduccion" class="page">
-            <h1 class="page-title">✨ Producción</h1>
+            <h1 class="page-title">Producción</h1>
 
             <button class="btn btn-primary btn-block" onclick="openProductionModal()" style="margin-bottom:14px">
                 ➕ Registrar producción
@@ -224,7 +223,7 @@
 
         <!-- ===== VISTA: REPORTES ===== -->
         <section id="pageReportes" class="page">
-            <h1 class="page-title">📊 Reportes</h1>
+            <h1 class="page-title">Reportes</h1>
 
             <!-- Filtros de fecha y categoría -->
             <div class="report-filters">
@@ -262,7 +261,7 @@
             </div>
 
             <!-- Exportar / Descargar respaldo -->
-            <div class="section-title">📥 Descargar respaldo</div>
+            <div class="section-title">Descargar respaldo</div>
             <div class="export-buttons">
                 <button class="btn btn-secondary" onclick="exportExcel()" style="flex:1">
                     📗 Excel (.xlsx)
@@ -475,6 +474,60 @@
             <button class="btn btn-secondary" onclick="closeModal();confirmResolve(false)" style="flex:1">No, cancelar</button>
             <button class="btn btn-danger" onclick="closeModal();confirmResolve(true)" style="flex:1" id="confirmOkBtn">Sí, dale</button>
         </div>
+    </div>
+
+    <!-- Modal: Recuperar Contraseña -->
+    <div id="modalForgotPassword" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">🔑 Recuperar contraseña</div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <form id="forgotPasswordForm">
+            <p style="font-size:0.95rem; color:var(--brown-light); margin-bottom:16px;">
+                Ingresá tu correo electrónico y te enviaremos un enlace seguro para restablecer tu contraseña.
+            </p>
+            <div id="forgotPasswordMsg" style="display:none; margin-bottom:14px; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.9rem;"></div>
+            <div class="form-group">
+                <label class="form-label" for="forgotEmail">Correo electrónico *</label>
+                <input type="email" class="form-input" id="forgotEmail" placeholder="tu@email.com" required>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="forgotSubmitBtn" style="flex:1">Enviar enlace</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal: Nueva Contraseña (Restablecer) -->
+    <div id="modalResetPassword" class="modal">
+        <div class="modal-header">
+            <div class="modal-title">🔒 Nueva contraseña</div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <form id="resetPasswordForm">
+            <p style="font-size:0.95rem; color:var(--brown-light); margin-bottom:16px;">
+                Ingresá tu nueva clave para actualizar el acceso a tu cuenta.
+            </p>
+            <div id="resetPasswordMsg" style="display:none; margin-bottom:14px; padding:10px 14px; border-radius:var(--radius-sm); font-size:0.9rem;"></div>
+            <div class="form-group">
+                <label class="form-label" for="newPassword">Nueva contraseña *</label>
+                <div class="password-input-wrapper">
+                    <input type="password" class="form-input" id="newPassword" placeholder="Al menos 6 caracteres" required minlength="6">
+                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('newPassword', this)" title="Ver u ocultar contraseña" tabindex="-1">👁️</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="confirmNewPassword">Confirmar nueva contraseña *</label>
+                <div class="password-input-wrapper">
+                    <input type="password" class="form-input" id="confirmNewPassword" placeholder="Repetí tu nueva contraseña" required minlength="6">
+                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('confirmNewPassword', this)" title="Ver u ocultar contraseña" tabindex="-1">👁️</button>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex:1">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="resetSubmitBtn" style="flex:1">Guardar clave</button>
+            </div>
+        </form>
     </div>
 </div>
 
